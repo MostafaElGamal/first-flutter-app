@@ -1,18 +1,38 @@
 import 'package:flutter/material.dart';
 
 class Question extends StatelessWidget {
-  final String questionText;
+  final Map question;
+  final Function changeQuestion;
 
-  Question(this.questionText);
+  Question({this.question, this.changeQuestion});
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      questionText,
+    var boxDecration = BoxDecoration(
+      color: Colors.green,
+      border: Border.all(
+        color: Colors.red,
+      ),
+    );
+
+    Widget questionChild = Text(
+      question['questionText'],
       style: TextStyle(
-        fontSize: 28,
+        fontSize: 25,
+        color: Colors.white,
       ),
       textAlign: TextAlign.center,
+    );
+
+    Widget questionContainer = Container(
+        decoration: boxDecration,
+        width: double.infinity,
+        margin: EdgeInsets.only(top: 10),
+        child: questionChild);
+
+    return GestureDetector(
+      onTap: () => changeQuestion(question['id']),
+      child: questionContainer,
     );
   }
 }

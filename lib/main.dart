@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './question.dart';
+import './answer.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,44 +15,71 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var _index = 0;
 
-  void _answerQuestion(num index) {
+  void _changeAnswers(num index) {
     setState(() {
       this._index = index;
     });
-    print('Answer ${this._index}');
+    print('id ${this._index}');
   }
 
   @override
   Widget build(BuildContext context) {
-    var scaffOld, appBar, body, questions, index;
+    var scaffOld, appBar, body, questionsData, questionsWidgets, answersWidgets;
 
     appBar = AppBar(
       title: Text('First App'),
     );
 
-    questions = [
-      'Mustafa1',
-      'Mustafa2',
-      'Mustafa3',
+    questionsData = [
+      {
+        'id': 0,
+        'questionText': 'Question1',
+        'answers': [
+          'Black',
+          'Red',
+          'white',
+        ]
+      },
+      {
+        'id': 1,
+        'questionText': 'Question2',
+        'answers': [
+          'Snak',
+          'Rabbit',
+          'Lion',
+        ]
+      },
+      {
+        'id': 2,
+        'questionText': 'Question3',
+        'answers': [
+          'Max',
+          'Louis',
+          'Me',
+        ]
+      },
     ];
+
+    questionsWidgets = questionsData.map((ele) {
+      Widget child = Question(
+        question: ele,
+        changeQuestion: _changeAnswers,
+      );
+      return Expanded(child: child);
+    }).toList();
+
+    answersWidgets = questionsData[this._index]['answers'].map((ele) {
+      return Answer(text: ele);
+    }).toList();
 
     body = Column(
       children: [
-        Question(
-          questions[this._index],
+        Row(
+          children: [
+            ...questionsWidgets,
+          ],
         ),
-        RaisedButton(
-          child: Text('Answe 1'),
-          onPressed: () => _answerQuestion(0),
-        ),
-        RaisedButton(
-          child: Text('Answe 2'),
-          onPressed: () => _answerQuestion(1),
-        ),
-        RaisedButton(
-          child: Text('Answe 3'),
-          onPressed: () => _answerQuestion(2),
-        ),
+        ...answersWidgets,
       ],
     );
     scaffOld = Scaffold(
